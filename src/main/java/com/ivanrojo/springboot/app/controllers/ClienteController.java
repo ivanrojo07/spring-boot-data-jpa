@@ -79,8 +79,9 @@ public class ClienteController {
 	
 	@RequestMapping(value="/delete/{id}",method=RequestMethod.POST)
 	public String destroy(@PathVariable Long id, Model model) {
-		Cliente cliente = clienteService.find(id);
-		clienteService.delete(cliente);
+//		Cliente cliente = clienteService.find(id);
+//		clienteService.delete(cliente);
+		clienteService.deleteById(id);
 		return "redirect:/listar";
 	}
 	
