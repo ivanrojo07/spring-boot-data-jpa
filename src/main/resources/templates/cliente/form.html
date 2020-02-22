@@ -12,7 +12,7 @@
 			</ul>
 		</div>
 		<form th:action="${edit} ? @{/update/}+${cliente.id} : @{/create}"
-			th:object="${cliente}" th:method="${edit} ? 'PUT' : 'POST'">
+			th:object="${cliente}" th:method="${edit} ? 'PUT' : 'POST'" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="nombre">Nombre del cliente</label> <input type="text"
 					th:field="*{nombre}" class="form-control" id="nombre"
