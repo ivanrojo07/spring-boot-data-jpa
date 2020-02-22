@@ -1,4 +1,31 @@
 /* Populate tables */
 INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(1,'Iván','Rojo', 'ivanrojo@mail.com','2020-02-19');
 INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(2,'Karen','Lopéz', 'karenlopez@mail.com','2020-02-19');
-
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(3,'Elizabeth','Rodriguez', 'elirod@mail.com','2020-02-20');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(4,'Javier','Marias', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(5,'Gabriel','García', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(6,'Mario','Vargallosas', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(7,'Iván','Rojo', 'ivanrojo@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(8,'Karen','Lopéz', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(9,'Elizabeth','Rodriguez', 'elirod@mail.com','2020-02-20');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(10,'Javier','Marias', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(11,'Gabriel','García', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(12,'Mario','Vargallosas', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(13,'Iván','Rojo', 'ivanrojo@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(14,'Karen','Lopéz', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(15,'Elizabeth','Rodriguez', 'elirod@mail.com','2020-02-20');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(16,'Javier','Marias', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(17,'Gabriel','García', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(18,'Mario','Vargallosas', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(19,'Iván','Rojo', 'ivanrojo@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(20,'Karen','Lopéz', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(21,'Elizabeth','Rodriguez', 'elirod@mail.com','2020-02-20');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(22,'Javier','Marias', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(23,'Gabriel','García', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(24,'Mario','Vargallosas', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(25,'Iván','Rojo', 'ivanrojo@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(26,'Karen','Lopéz', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(27,'Elizabeth','Rodriguez', 'elirod@mail.com','2020-02-20');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(28,'Javier','Marias', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(29,'Gabriel','García', 'karenlopez@mail.com','2020-02-19');
+INSERT INTO clientes (id, nombre, apellido, email, created_at) VALUES(30,'Mario','Vargallosas', 'karenlopez@mail.com','2020-02-19');

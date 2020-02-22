@@ -3,6 +3,8 @@ package com.ivanrojo.springboot.app.models.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +59,12 @@ public class ClienteServiceImpl implements IClienteService{
 	@Transactional
 	public void deleteById(Long id) {
 		clienteDao2.deleteById(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<Cliente> findAll(Pageable pageable) {
+		return (Page<Cliente>) clienteDao2.findAll(pageable);
 	}
 
 }
