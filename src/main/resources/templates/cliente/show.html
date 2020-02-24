@@ -8,6 +8,9 @@
 		<h1 class="text-success" th:text="${titulo}"></h1>
 		<table>
 			<tr>
+				<td th:if="${cliente.foto != null}"><img th:src="@{/uploads/}+${cliente.foto}" class="rounded float-left h-25 w-25" alt=""></td>
+			</tr>
+			<tr>
 				<th>ID</th>
 				<td th:text="${cliente.id}"></td>
 			</tr>

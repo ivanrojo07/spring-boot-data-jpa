@@ -17,7 +17,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-
 @Entity
 @Table(name = "clientes")
 public class Cliente implements Serializable {
@@ -25,9 +24,9 @@ public class Cliente implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotEmpty
-	@Size(min=4,max=12)
+	@Size(min = 4, max = 12)
 	private String nombre;
 	@NotEmpty
 	private String apellido;
@@ -35,19 +34,21 @@ public class Cliente implements Serializable {
 	@Email
 	private String email;
 //	NotEmpty solo cadenas, @NotNull para los demas
-	
+
 	@Column(name = "created_at")
 	@Temporal(TemporalType.DATE)
 	private Date createdAt;
-	
+
+	private String foto;
+
 	@PrePersist
 	public void prePersist() {
 		createdAt = new Date();
 	}
-	
+
 	@PreUpdate
 	public void preUpdate() {
-		createdAt= new Date();
+		createdAt = new Date();
 	}
 
 	public Long getId() {
@@ -92,6 +93,14 @@ public class Cliente implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 	/**
