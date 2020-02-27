@@ -133,7 +133,7 @@ public class ClienteController {
 	
 	@RequestMapping(value="/cliente/{id}",method=RequestMethod.GET)
 	public String show(@PathVariable Long id,Model model, RedirectAttributes flash) {
-		Cliente cliente = clienteService.find(id);
+		Cliente cliente = clienteService.fetchClienteById(id);//clienteService.find(id);
 		if(cliente == null) {
 			flash.addFlashAttribute("error", "El cliente no existe en la base de datos");
 			return "redirect:/listar";

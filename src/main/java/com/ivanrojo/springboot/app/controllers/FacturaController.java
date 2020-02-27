@@ -92,7 +92,7 @@ public class FacturaController {
 	public String show(@PathVariable(value = "id") Long factura_id,
 			Model model,
 			RedirectAttributes flash) {
-		Factura factura = clienteService.findFacturaById(factura_id);
+		Factura factura = clienteService.fetchFacturaById(factura_id);//clienteService.findFacturaById(factura_id);
 		if (factura == null) {
 			flash.addFlashAttribute("error", "La factura no existe en la base de datos");
 			return "redirect:/listar";

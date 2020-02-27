@@ -113,4 +113,16 @@ public class ClienteServiceImpl implements IClienteService{
 		
 	}
 
+	@Override
+	@Transactional(readOnly = true )
+	public Factura fetchFacturaById(Long id) {
+		return facturaDao.fetchByIdWithClienteWithLineaFacturaWithProducto(id);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Cliente fetchClienteById(Long id) {
+		return clienteDao2.fetchByIdWithFacturas(id);
+	}
+
 }
