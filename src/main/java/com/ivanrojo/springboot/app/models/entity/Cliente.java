@@ -1,13 +1,18 @@
 package com.ivanrojo.springboot.app.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -38,6 +43,10 @@ public class Cliente implements Serializable {
 	@Column(name = "created_at")
 	@Temporal(TemporalType.DATE)
 	private Date createdAt;
+	
+	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Factura> facturas;
+	
 
 	private String foto;
 
@@ -101,6 +110,22 @@ public class Cliente implements Serializable {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+
+	public List<Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(List<Factura> facturas) {
+		this.facturas = facturas;
+	}
+	
+	public void addFactura(Factura factura) {
+		facturas.add(factura);
+	}
+
+	public Cliente() {
+		 facturas = new ArrayList<Factura>();
 	}
 
 	/**

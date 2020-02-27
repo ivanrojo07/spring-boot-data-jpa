@@ -8,7 +8,9 @@
 		<h1 class="text-success" th:text="${titulo}"></h1>
 		<table>
 			<tr>
-				<td th:if="${cliente.foto != null}"><img th:src="@{/uploads/}+${cliente.foto}" class="rounded float-left h-25 w-25" alt=""></td>
+				<td th:if="${cliente.foto != null}"><img
+					th:src="@{/uploads/}+${cliente.foto}"
+					class="rounded float-left h-25 w-25" alt=""></td>
 			</tr>
 			<tr>
 				<th>ID</th>
@@ -30,7 +32,44 @@
 				<th>Fecha de creación</th>
 				<td th:text="${cliente.createdAt}"></td>
 			</tr>
+			<tr>
+			<td><a class="btn btn-info" th:href="@{'/factura/'}+${cliente.id}+@{'/create'}">Crear factura</a></td>
+			<td><a class="btn btn-success" th:href="@{'/edit/'}+${cliente.id}">Editar Cliente</a></td>
+			</tr>
+			
 		</table>
+	</div>
+	<div class="container alert alert-info my-4"
+		th:if="${#lists.isEmpty(cliente.facturas)}"
+		th:text="'No hay facturas asignada a este cliente'"></div>
+	<div class="container">
+		<table th:if="${not #lists.isEmpty(cliente.facturas)}" class="table table-striped table-bordered my-4">
+			<thead class="bg-info text-white">
+				<tr>
+					<th scope="col">Folio</th>
+					<th scope="col">Descripción</th>
+					<th scope="col">Fecha</th>
+					<th scope="col">Total</th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="factura : ${cliente.facturas}">
+					<th scope="row">
+					<a class="btn btn-info" th:href="@{'/factura/show/'+${factura.id}}" th:text="${factura.id}"></a>
+					</th>
+					<td th:text="${factura.descripcion}"></td>
+					<td th:text="${factura.createAt}"></td>
+					<td th:text="${factura.total}"></td>
+					<td>
+						<form th:action="@{'/factura/delete/'+${factura.id}}" method="POST">
+						<button type="submit" class="btn btn-danger">Eliminar</button>
+						</form>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		
 	</div>
 	<footer th:replace="layout/layout::footer"></footer>
 </body>

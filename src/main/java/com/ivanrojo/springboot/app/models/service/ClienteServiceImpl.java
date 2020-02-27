@@ -10,7 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ivanrojo.springboot.app.models.dao.IClienteDao;
 import com.ivanrojo.springboot.app.models.dao.IClienteQueryDAO;
+import com.ivanrojo.springboot.app.models.dao.IFacturaDao;
+import com.ivanrojo.springboot.app.models.dao.IProductoDao;
 import com.ivanrojo.springboot.app.models.entity.Cliente;
+import com.ivanrojo.springboot.app.models.entity.Factura;
+import com.ivanrojo.springboot.app.models.entity.Producto;
 
 @Service
 public class ClienteServiceImpl implements IClienteService{
@@ -19,6 +23,10 @@ public class ClienteServiceImpl implements IClienteService{
 	private IClienteDao clienteDao;
 	@Autowired
 	private IClienteQueryDAO clienteDao2;
+	@Autowired
+	private IProductoDao productoDao;
+	@Autowired
+	private IFacturaDao facturaDao;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -65,6 +73,44 @@ public class ClienteServiceImpl implements IClienteService{
 	@Transactional(readOnly = true)
 	public Page<Cliente> findAll(Pageable pageable) {
 		return (Page<Cliente>) clienteDao2.findAll(pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findByNombre(String term) {
+		return (List<Producto>) productoDao.findByNombre(term);
+	}
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findByNombreLikeIgnoreCase(String term){
+		return (List<Producto>) productoDao.findByNombreLikeIgnoreCase("%"+term+"%");
+	}
+
+	@Override
+	@Transactional
+	public void saveFactura(Factura factura) {
+		facturaDao.save(factura);
+		
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Producto findProductoById(Long id) {
+		
+		return productoDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Factura findFacturaById(Long id) {
+		return facturaDao.findById(id).orElse(null);
+	}
+
+	@Override
+	@Transactional
+	public void deleteFactura(Long id) {
+		facturaDao.deleteById(id);
+		
 	}
 
 }
