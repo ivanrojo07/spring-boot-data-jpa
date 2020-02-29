@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.thymeleaf.org">
+<html xmlns="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/layout::head">
 </head>
 <body>
 	<header th:replace="layout/layout::header"></header>
 	<div class="container">
 		<h1 th:text="${titulo}" class="text-primary"></h1>
-		<a th:href="@{/create}" class="btn btn-info">Nuevo Cliente</a>
+		<a th:href="@{/create}" sec:authorize="hasRole('ADMIN')" class="btn btn-info">Nuevo Cliente</a>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -15,28 +15,29 @@
 					<th>Apellido</th>
 					<th>Email</th>
 					<th>Fecha</th>
-					<th></th>
-					<th></th>
-					<th></th>
+					<th sec:authorize="hasRole('ADMIN')"></th>
+					<th sec:authorize="hasRole('ADMIN')"></th>
+					<th sec:authorize="hasRole('ADMIN')"></th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="cliente: ${clientes}">
 					<td>
-					<a th:href="@{'cliente/'}+${cliente.id}"
+					<a sec:authorize="isAuthenticated()" th:href="@{'cliente/'}+${cliente.id}"
 						class="btn btn-info" th:text="${cliente.id}"></a>
+						<span sec:authorize="!isAuthenticated()" th:text="${cliente.id}"></span>
 					</td>
 					<td th:text="${cliente.nombre}"></td>
 					<td th:text="${cliente.apellido}"></td>
 					<td th:text="${cliente.email}"></td>
 					<td th:text="${cliente.createdAt}"></td>
-					<td>
+					<td sec:authorize="hasRole('ADMIN')">
 					<a class="btn btn-info btn-xs" th:href="@{'/factura/'}+${cliente.id}+@{'/create'}">Crear factura</a>
 					</td>
-					<td> <a th:href="@{'edit/'}+${cliente.id}"
+					<td sec:authorize="hasRole('ADMIN')"> <a th:href="@{'edit/'}+${cliente.id}"
 						class="btn btn-success btn-xs">Editar</a>
 					</td>
-					<td>
+					<td sec:authorize="hasRole('ADMIN')">
 						<form th:action="@{'delete/'}+${cliente.id}" method="POST">
 							<button type="submit" class="btn btn-danger btn-xs" >Eliminar</button>
 						</form></td>

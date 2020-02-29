@@ -5,9 +5,11 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -19,6 +21,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,6 +59,7 @@ public class ClienteController {
 	
 	private final Logger log = LoggerFactory.getLogger(getClass());
 //	Tercera forma de subir imagen
+	@Secured({"ROLE_USER","ROLE_ADMIN"})
 	@GetMapping(value="/uploads/{filename:.+}")
 	public ResponseEntity<Resource> verFoto(@PathVariable String filename){
 //		Path pathImage = Paths.get("uploads").resolve(filename).toAbsolutePath();
@@ -76,7 +87,40 @@ public class ClienteController {
 	}
 	
 	@RequestMapping(value= {"listar",""},method=RequestMethod.GET)
-	public String index(@RequestParam(name="page",defaultValue="0") int page, Model model) {
+	public String index(@RequestParam(name="page",defaultValue="0") int page, Model model, Authentication authentication, HttpServletRequest request) {
+		
+		if (authentication != null) {
+			log.info("Hola usuario autenticado, tu username es: ".concat(authentication.getName()));
+		}
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		if (auth != null) {
+			log.info("Utilizando de forma estática SecurityContextHolder.getContext().getAuthentication(): Usuario "+auth.getName());
+		}
+		
+		if (hasRole("ROLE_ADMIN")) {
+			log.info("Hola ".concat(auth.getName()).concat(" tienes acceso!"));
+		}
+		else {
+			log.info("Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
+		}
+		
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
+		if (securityContext.isUserInRole("ADMIN")) {
+			log.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" tienes acceso"));
+		}
+		else {
+			log.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
+		}
+		
+		if (request.isUserInRole("ROLE_ADMIN")) {
+			log.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" tienes acceso"));
+		}
+		else {
+			log.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
+		}
+		
 		Pageable pageRequest = PageRequest.of(page, 4);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("listar", clientes);
@@ -86,6 +130,7 @@ public class ClienteController {
 		return "cliente/listar";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value="/create",method=RequestMethod.GET)
 	public String create(Map<String,Object> model) {
 		Cliente cliente = new Cliente();
@@ -95,6 +140,7 @@ public class ClienteController {
 		return "cliente/form";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value="/create",method=RequestMethod.POST)
 	public String store(@Valid Cliente cliente, BindingResult result,Model model,@RequestParam("image") MultipartFile image, RedirectAttributes flash, SessionStatus status) {
 		if(result.hasErrors()) {
@@ -131,6 +177,7 @@ public class ClienteController {
 		return "redirect:/listar";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_USER')")
 	@RequestMapping(value="/cliente/{id}",method=RequestMethod.GET)
 	public String show(@PathVariable Long id,Model model, RedirectAttributes flash) {
 		Cliente cliente = clienteService.fetchClienteById(id);//clienteService.find(id);
@@ -143,6 +190,7 @@ public class ClienteController {
 		return "cliente/show";
 	}
 	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@RequestMapping(value="/edit/{id}", method=RequestMethod.GET)
 	public String edit(@PathVariable Long id, Model model, RedirectAttributes flash) {
 		try {
@@ -159,6 +207,7 @@ public class ClienteController {
 		}
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value="/update/{id}",method=RequestMethod.POST)
 	public String update(@Valid Cliente cliente, BindingResult result,@PathVariable Long id,@RequestParam("image") MultipartFile image, Model model, RedirectAttributes flash, SessionStatus status) {
 		if(result.hasErrors()) {
@@ -212,11 +261,13 @@ public class ClienteController {
 //			}
 		}
 		clienteService.update(cliente,id);
+		
 		status.setComplete();
 		flash.addFlashAttribute("success", "Cliente se ha actualizado con éxito.");
 		return "redirect:/listar";
 	}
 	
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(value="/delete/{id}",method=RequestMethod.POST)
 	public String destroy(@PathVariable Long id, Model model, RedirectAttributes flash) {
 //		Cliente cliente = clienteService.find(id);
@@ -232,6 +283,30 @@ public class ClienteController {
 		clienteService.deleteById(id);
 		flash.addFlashAttribute("success", "Cliente Eliminado con éxito.");
 		return "redirect:/listar";
+	}
+	
+	private boolean hasRole(String role) {
+		SecurityContext context = SecurityContextHolder.getContext();
+		
+		if (context == null) {
+			return false;
+		}
+		Authentication auth = context.getAuthentication();
+		
+		if (auth == null) {
+			return false;
+			
+		}
+		Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+		
+		return authorities.contains(new SimpleGrantedAuthority(role));
+//		for (GrantedAuthority authority : authorities) {
+//			if (role.equals(authority.getAuthority())) {
+//				return true;
+//			}
+//		}
+//		
+//		return false;
 	}
 	
 }

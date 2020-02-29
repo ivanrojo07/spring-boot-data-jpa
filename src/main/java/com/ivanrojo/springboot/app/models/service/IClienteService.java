@@ -19,7 +19,7 @@ public interface IClienteService {
 	
 	public Cliente find(Long id);
 	
-	public void update(Cliente cliente, Long id);
+	public void update(Cliente cliente,Long id);
 	
 	public void delete(Cliente cliente);
 	
