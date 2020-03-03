@@ -1,6 +1,6 @@
 package com.ivanrojo.springboot.app;
 
-import javax.sql.DataSource;
+//import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,9 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 //import org.springframework.security.core.userdetails.User;
 //import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.ivanrojo.springboot.app.auth.handler.LoginSuccessHandler;
+import com.ivanrojo.springboot.app.models.service.JpaUserDetailsService;
 
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Configuration
@@ -22,11 +23,15 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter{
 	
 	@Autowired 
 	private LoginSuccessHandler successHandler;
+	
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private DataSource dataSource;
+	private JpaUserDetailsService userDetailsService;
+	
+//	@Autowired
+//	private DataSource dataSource;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -67,8 +72,13 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	public void configurerGlobal(AuthenticationManagerBuilder builder) throws Exception{
-		PasswordEncoder encoder = this.passwordEncoder;
+//		143 Con JPA User Details Service
+		builder.userDetailsService(userDetailsService)
+			.passwordEncoder(passwordEncoder);
+//		PasswordEncoder encoder = this.passwordEncoder;
+//		Usar el password encoder con funciones de flecha
 //		UserBuilder users = User.builder().passwordEncoder(password->encoder.encode(password));
+//		Usar el password encoder como funcion lambda y guardar usuarios en memoria
 //		UserBuilder users = User.builder().passwordEncoder(encoder::encode);
 //		builder.inMemoryAuthentication()
 //						.withUser(users.username("admin")
@@ -77,11 +87,13 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter{
 //						.withUser(users.username("ivan")
 //						.password("Prueba12345")
 //						.roles("USER"));
-		builder.jdbcAuthentication()
-				.dataSource(dataSource)
-				.passwordEncoder(passwordEncoder)
-				.usersByUsernameQuery("select username, password, enabled from users where username =?")
-				.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id = u.id) where u.username=?");
+//		Crear usuarios en base de datos
+//		builder.jdbcAuthentication()
+//				.dataSource(dataSource)
+//				.passwordEncoder(passwordEncoder)
+//				.usersByUsernameQuery("select username, password, enabled from users where username =?")
+//				.authoritiesByUsernameQuery("select u.username, a.authority from authorities a inner join users u on (a.user_id = u.id) where u.username=?");
 	
+		
 	}
 }

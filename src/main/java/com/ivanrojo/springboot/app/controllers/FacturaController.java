@@ -89,7 +89,7 @@ public class FacturaController {
 		return "redirect:/cliente/"+factura.getCliente().getId();
 	}
 	
-	@Secured("ROLE_ADMIN")
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("/show/{id}")
 	public String show(@PathVariable(value = "id") Long factura_id,
 			Model model,

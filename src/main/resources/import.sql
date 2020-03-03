@@ -27,3 +27,12 @@ INSERT INTO facturas_items (cantidad, factura_id, producto_id) VALUES(1,1,7);
 
 INSERT INTO facturas (descripcion, observacion, cliente_id, create_at) VALUES ('Factura bicicleta', 'Alguna nota importante!', 1, NOW());
 INSERT INTO facturas_items (cantidad, factura_id, producto_id) VALUES (3,2,6);
+
+
+/* CREAMOS USUARIOS CON ROLES */
+INSERT INTO public.users (id, username, password, enabled) VALUES (1, 'ivan', '$2a$10$c3u/VGzedwuLUUMmDWCr9u2rvyRLExtOO.w2yavH1hEzDM/eEMlcS', true);
+INSERT INTO public.users (id, username, password, enabled) VALUES (2, 'admin', '$2a$10$tKUVuDgwpzafZyFnkfDC3O7cr1FV0ihQtg5LwgGB6qpUyo4t7zU1y', true);
+
+INSERT INTO authorities (user_id, authority) VALUES (1,'ROLE_USER');
+INSERT INTO authorities (user_id, authority) VALUES (2,'ROLE_USER');
+INSERT INTO authorities (user_id, authority) VALUES (2,'ROLE_ADMIN');
