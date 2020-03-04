@@ -3,21 +3,25 @@
 <head th:replace="layout/layout::head">
 </head>
 <body>
+
+	<div id="i18n_eliminar_cliente" th:text="#{text.cliente.eliminarOk}" style="display: none;"></div>
+
+
 	<header th:replace="layout/layout::header"></header>
 	<div class="container">
 		<h1 th:text="${titulo}" class="text-primary"></h1>
-		<a th:href="@{/create}" sec:authorize="hasRole('ADMIN')" class="btn btn-info">Nuevo Cliente</a>
+		<a th:href="@{/create}" sec:authorize="hasRole('ADMIN')" class="btn btn-info" th:text="#{text.cliente.crear}">Nuevo Cliente</a>
 		<table class="table table-striped">
 			<thead>
 				<tr>
 					<th>id</th>
-					<th>Nombre</th>
-					<th>Apellido</th>
-					<th>Email</th>
-					<th>Fecha</th>
-					<th sec:authorize="hasRole('ADMIN')"></th>
-					<th sec:authorize="hasRole('ADMIN')"></th>
-					<th sec:authorize="hasRole('ADMIN')"></th>
+					<th th:text="#{text.cliente.nombre}">Nombre</th>
+					<th th:text="#{text.cliente.apellido}">Apellido</th>
+					<th th:text="#{text.cliente.email}">Email</th>
+					<th th:text="#{text.cliente.createAt}">Fecha</th>
+					<th th:text="#{text.cliente.factura.crear}" sec:authorize="hasRole('ADMIN')"></th>
+					<th th:text="#{text.cliente.editar}" sec:authorize="hasRole('ADMIN')"></th>
+					<th th:text="#{text.cliente.eliminar}" sec:authorize="hasRole('ADMIN')"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -32,14 +36,15 @@
 					<td th:text="${cliente.email}"></td>
 					<td th:text="${cliente.createdAt}"></td>
 					<td sec:authorize="hasRole('ADMIN')">
-					<a class="btn btn-info btn-xs" th:href="@{'/factura/'}+${cliente.id}+@{'/create'}">Crear factura</a>
+					<a class="btn btn-info btn-xs" th:href="@{'/factura/'}+${cliente.id}+@{'/create'}" th:text="#{text.cliente.factura.crear}">Crear factura</a>
 					</td>
 					<td sec:authorize="hasRole('ADMIN')"> <a th:href="@{'edit/'}+${cliente.id}"
-						class="btn btn-success btn-xs">Editar</a>
+						class="btn btn-success btn-xs" th:text="#{text.cliente.editar}">Editar</a>
 					</td>
 					<td sec:authorize="hasRole('ADMIN')">
 						<form th:action="@{'delete/'}+${cliente.id}" method="POST">
-							<button type="submit" class="btn btn-danger btn-xs" >Eliminar</button>
+							<button type="submit" class="btn btn-danger btn-xs" th:text="#{text.cliente.eliminar}"
+								onclick="return confirm(document.getElementById('i18n_eliminar_cliente').innerHTML);">Eliminar</button>
 						</form></td>
 				</tr>
 			</tbody>

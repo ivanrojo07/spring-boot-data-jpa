@@ -14,31 +14,29 @@
 		<form th:action="${edit} ? @{/update/}+${cliente.id} : @{/create}"
 			th:object="${cliente}" th:method="${edit} ? 'PUT' : 'POST'" enctype="multipart/form-data">
 			<div class="form-group">
-				<label for="nombre">Nombre del cliente</label> <input type="text"
-					th:field="*{nombre}" class="form-control" id="nombre"
-					placeholder="Escriba su nombre"> <small class="text-danger"
+				<label for="nombre" th:text="#{text.cliente.nombre}">Nombre del cliente</label> <input type="text"
+					th:field="*{nombre}" class="form-control" id="nombre"> <small class="text-danger"
 					th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
 			</div>
 			<div class="form-group">
-				<label for="apellido">Apellido del cliente</label> <input
+				<label for="apellido" th:text="#{text.cliente.apellido}">Apellido del cliente</label> <input
 					type="text" th:field="*{apellido}" class="form-control"
-					id="apellido" placeholder="Escriba su apellido"> <small
+					id="apellido"> <small
 					class="text-danger" th:if="${#fields.hasErrors('apellido')}"
 					th:errors="*{apellido}"></small>
 			</div>
 			<div class="form-group">
-				<label for="email">Correo Electrónico</label> <input type="email"
-					th:field="*{email}" class="form-control" id="email"
-					placeholder="Enter email"> <small class="text-danger"
+				<label for="email" th:text="#{text.cliente.email}">Correo Electrónico</label> <input type="email"
+					th:field="*{email}" class="form-control" id="email"> <small class="text-danger"
 					th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
 			</div>
 			<div class="form-group">
-			<label for="image">Foto de perfil</label>
+			<label for="image" th:text="#{text.cliente.foto}">Foto de perfil</label>
 			<input type="file" name="image" id="image" class="form-control"/>
 <!-- 			<small class="text-danger" -->
 <!-- 					th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></small> -->
 			</div>
-			<button type="submit" class="btn btn-primary">Guardar
+			<button type="submit" class="btn btn-primary" th:text="${titulo}">Guardar
 				Cliente</button>
 		</form>
 	</div>
