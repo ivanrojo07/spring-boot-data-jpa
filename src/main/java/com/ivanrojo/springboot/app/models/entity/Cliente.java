@@ -22,6 +22,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Table(name = "clientes")
 public class Cliente implements Serializable {
@@ -43,9 +46,11 @@ public class Cliente implements Serializable {
 
 	@Column(name = "created_at")
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createdAt;
 	
 	@OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
 	private List<Factura> facturas;
 	
 

@@ -9,12 +9,16 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 //import org.springframework.security.core.userdetails.User;
 //import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.ivanrojo.springboot.app.auth.filter.JWTAuthenticationFilter;
+import com.ivanrojo.springboot.app.auth.filter.JWTAuthorizationFilter;
 import com.ivanrojo.springboot.app.auth.handler.LoginSuccessHandler;
+import com.ivanrojo.springboot.app.auth.service.JWTService;
 import com.ivanrojo.springboot.app.models.service.JpaUserDetailsService;
 
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -29,6 +33,8 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter{
 	
 	@Autowired
 	private JpaUserDetailsService userDetailsService;
+	@Autowired
+	private JWTService jwtService;
 	
 //	@Autowired
 //	private DataSource dataSource;
@@ -37,7 +43,7 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http.authorizeRequests()
-			.antMatchers("/","/css/**","/js/**","/listar", "/locale").permitAll()
+			.antMatchers("/","/css/**","/js/**","/listar"/*, "/api/**"*/, "/locale").permitAll()
 //			.antMatchers("/cliente/**").hasAnyRole("USER")
 //			.antMatchers("/uploads/**").hasAnyRole("USER")
 //			.antMatchers("/factura/show/**").hasAnyRole("USER")
@@ -51,20 +57,25 @@ public class SpringSecurityConfig  extends WebSecurityConfigurerAdapter{
 //			.antMatchers("/factura/delete/**").hasAnyRole("ADMIN")
 			.antMatchers("/h2-console/**").permitAll()
 			.anyRequest().authenticated()
-			.and()
+			/*.and()
 			.formLogin().successHandler(successHandler).loginPage("/login").permitAll()
 			.and()
 			.exceptionHandling()
 			.accessDeniedPage("/error_403")
 			.and()
 			.logout()
-			.permitAll()
+			.permitAll()*/
 			.and()
             .headers().frameOptions().disable()
             .and()
-            .csrf().ignoringAntMatchers("/h2-console/**")
-            .and()
-            .cors().disable();
+			.addFilter(new JWTAuthorizationFilter(authenticationManager(),jwtService))
+			.addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtService))
+            .csrf().disable()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//            .and()
+//            .csrf().ignoringAntMatchers("/h2-console/**")
+//            .and()
+//            .cors().disable();
 		
 	}
 

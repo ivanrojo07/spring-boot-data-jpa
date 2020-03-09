@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -39,6 +40,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -47,8 +50,10 @@ import com.ivanrojo.springboot.app.models.entity.Cliente;
 import com.ivanrojo.springboot.app.models.service.IClienteService;
 import com.ivanrojo.springboot.app.models.service.IUploadFileService;
 import com.ivanrojo.springboot.app.util.paginator.PageRender;
+import com.ivanrojo.springboot.app.view.xml.ClienteList;
 
 @Controller
+@SessionAttributes("cliente")
 public class ClienteController {
 	
 	@Autowired
@@ -91,40 +96,53 @@ public class ClienteController {
 				body(recurso);
 	}
 	
-	@RequestMapping(value= {"listar",""},method=RequestMethod.GET)
-	public String index(@RequestParam(name="page",defaultValue="0") int page, Model model, Authentication authentication, HttpServletRequest request, Locale locale) {
+//	@RequestMapping(value= {"api/listar","/api"}, method = RequestMethod.GET)
+//	public @ResponseBody List<Cliente> listarRest(){
+//		return clienteService.findAll();
+//	}
+	
+	@RequestMapping(value= {"api/listar","/api"}, method = RequestMethod.GET)
+	public @ResponseBody ClienteList listarRest(){
+		return new ClienteList(clienteService.findAll());
+	}
+	
+	@RequestMapping(value= {"/listar","/"},method=RequestMethod.GET)
+	public String index(@RequestParam(name="page",defaultValue="0") int page, Model model, 
+			Authentication authentication, 
+			HttpServletRequest request, 
+			Locale locale) {
 		
-		if (authentication != null) {
-			log.info("Hola usuario autenticado, tu username es: ".concat(authentication.getName()));
-		}
+//		if (authentication != null) {
+//			log.info("Hola usuario autenticado, tu username es: ".concat(authentication.getName()));
+//		}
 		
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
-		if (auth != null) {
-			log.info("Utilizando de forma estática SecurityContextHolder.getContext().getAuthentication(): Usuario "+auth.getName());
-		}
-		
-		if (hasRole("ROLE_ADMIN")) {
-			log.info("Hola ".concat(auth.getName()).concat(" tienes acceso!"));
-		}
-		else {
-			log.info("Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
-		}
-		
+//		if (auth != null) {
+//			log.info("Utilizando de forma estática SecurityContextHolder.getContext().getAuthentication(): Usuario "+auth.getName());
+//		}
+//		
+//		if (hasRole("ROLE_ADMIN")) {
+//			log.info("Hola ".concat(auth.getName()).concat(" tienes acceso!"));
+//		}
+//		else {
+//			log.info("Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
+//		}
+//		
 		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "ROLE_");
-		if (securityContext.isUserInRole("ADMIN")) {
-			log.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" tienes acceso"));
-		}
-		else {
-			log.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
-		}
-		
-		if (request.isUserInRole("ROLE_ADMIN")) {
-			log.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" tienes acceso"));
-		}
-		else {
-			log.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
-		}
+//		if (securityContext.isUserInRole("ADMIN")) {
+//			log.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" tienes acceso"));
+//		}
+//		else {
+//			log.info("Forma usando SecurityContextHolderAwareRequestWrapper: Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
+//		}
+//		
+//		if (request.isUserInRole("ROLE_ADMIN")) {
+//			log.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" tienes acceso"));
+//		}
+//		else {
+//			log.info("Forma usando HttpServletRequest: Hola ".concat(auth.getName()).concat(" No tienes acceso!"));
+//		}
 		
 		Pageable pageRequest = PageRequest.of(page, 4);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
